@@ -24,12 +24,18 @@ import {
   IonSkeletonText,
   IonTitle,
   IonToolbar,
-  ModalController
+  ModalController,
+  ViewDidEnter
 } from '@ionic/angular/standalone';
 import { ReactiveFormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
 import { add, alertCircleOutline, search, swapVertical } from 'ionicons/icons';
 import CategoryModalComponent from '../../component/category-modal/category-modal.component';
+import { CategoryService } from '../../service/category.service';
+import { ToastService } from '../../../shared/service/toast.service';
+import { Category, CategoryCriteria } from '../../../shared/domain';
+import { finalize } from 'rxjs';
+import { InfiniteScrollCustomEvent, RefresherCustomEvent } from '@ionic/angular';
 
 @Component({
   selector: 'app-category-list',
@@ -65,10 +71,23 @@ import CategoryModalComponent from '../../component/category-modal/category-moda
     IonList
   ]
 })
-export default class CategoryListComponent {
+export default class CategoryListComponent implements ViewDidEnter {
   // DI
+  private readonly categoryService = inject(CategoryService);
   private readonly modalCtrl = inject(ModalController);
+  private readonly toastService = inject(ToastService);
 
+  categories: Category[] | null = null;
+  readonly initialSort = 'name,asc';
+  lastPageReached = false;
+  loading = false;
+  searchCriteria: CategoryCriteria = { page: 0, size: 25, sort: this.initialSort };
+
+  ionViewDidEnter(): void {
+    this.loadCategories();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   constructor() {
     // Add all used Ionic icons
     addIcons({ swapVertical, search, alertCircleOutline, add });
@@ -78,6 +97,37 @@ export default class CategoryListComponent {
     const modal = await this.modalCtrl.create({ component: CategoryModalComponent });
     modal.present();
     const { role } = await modal.onWillDismiss();
-    console.log('role', role);
+    if (role === 'refresh') this.reloadCategories();
+  }
+
+  private loadCategories(next?: () => void): void {
+    if (!this.searchCriteria.name) delete this.searchCriteria.name;
+    this.loading = true;
+    this.categoryService
+      .getCategories(this.searchCriteria)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          if (next) next();
+        })
+      )
+      .subscribe({
+        next: categories => {
+          if (this.searchCriteria.page === 0 || !this.categories) this.categories = [];
+          this.categories.push(...categories.content);
+          this.lastPageReached = categories.last;
+        },
+        error: error => this.toastService.displayWarningToast('Could not load categories', error)
+      });
+  }
+
+  loadNextCategoryPage($event: InfiniteScrollCustomEvent) {
+    this.searchCriteria.page++;
+    this.loadCategories(() => $event.target.complete());
+  }
+
+  reloadCategories($event?: RefresherCustomEvent): void {
+    this.searchCriteria.page = 0;
+    this.loadCategories(() => $event?.target.complete());
   }
 }
