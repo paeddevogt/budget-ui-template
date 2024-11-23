@@ -59,20 +59,19 @@ export default class CategoryModalComponent implements ViewWillEnter, ViewDidEnt
   // Passed into the component by the ModalController, available in the ionViewWillEnter
   @Input() category: Category = {} as Category;
 
-  ionViewDidEnter(): void {
-    this.nameInput?.setFocus();
-  }
-
-  ionViewWillEnter(): void {
-    this.categoryForm.patchValue(this.category);
-  }
-
   // eslint-disable-next-line @typescript-eslint/member-ordering
   constructor() {
     // Add all used Ionic icons
     addIcons({ close, save, text, trash });
   }
 
+  ionViewWillEnter(): void {
+    this.categoryForm.patchValue(this.category);
+  }
+
+  ionViewDidEnter(): void {
+    this.nameInput?.setFocus();
+  }
   cancel(): void {
     this.modalCtrl.dismiss(null, 'cancel');
   }
@@ -92,6 +91,7 @@ export default class CategoryModalComponent implements ViewWillEnter, ViewDidEnt
         });
     });
   }
+
   delete(): void {
     this.actionSheetService
       .showDeletionConfirmation('Are you sure you want to delete this category?')

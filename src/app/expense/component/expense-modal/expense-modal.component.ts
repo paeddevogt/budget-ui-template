@@ -13,8 +13,10 @@ import {
   IonInput,
   IonItem,
   IonLabel,
+  IonList,
   IonModal,
   IonNote,
+  IonRow,
   IonSelect,
   IonSelectOption,
   IonTitle,
@@ -52,7 +54,9 @@ import CategoryModalComponent from '../../../category/component/category-modal/c
     IonModal,
     IonDatetime,
     IonFab,
-    IonFabButton
+    IonFabButton,
+    IonRow,
+    IonList
   ]
 })
 export default class ExpenseModalComponent {

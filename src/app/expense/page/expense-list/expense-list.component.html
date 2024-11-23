@@ -1,15 +1,62 @@
+<!-- ------ -->
+<!-- Header -->
+<!-- ------ -->
 <ion-header>
   <ion-toolbar>
-    <ion-title> Expense List </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button/>
+    </ion-buttons>
+    <ion-title>Expenses</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
-  <h1>Heading 1</h1>
-  <h2>Heading 2</h2>
-  <h3>Heading 3</h3>
-  <h4>Heading 4</h4>
-  <h5>Heading 5</h5>
-  <h6>Heading 6</h6>
 
-  <p>Here's a small text description for the content. Nothing more, nothing less.</p>
+<!-- ------- -->
+<!-- Content -->
+<!-- ------- -->
+<ion-content>
+  <ion-grid class="ion-padding">
+    <!-- Search & Sort -->
+    <ion-row>
+
+      <ion-col size="12" size-md="4">
+        <ion-item>
+          <ion-icon name="swap-vertical" slot="start"/>
+          <ion-select interface="popover">
+            <ion-select-option> Name (A-Z) </ion-select-option>
+            <ion-select-option> Name (Z-A) </ion-select-option>
+            <ion-select-option> Created at (newest first) </ion-select-option>
+            <ion-select-option> Created at (oldest first) </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12" size-sm="4">
+        <ion-item>
+          <ion-icon name="pricetag" slot="start"/>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12" size-sm="4">
+        <ion-item>
+          <ion-icon name="search" slot="start"/>
+          <ion-input maxlength="40" placeholder="Search" [clearInput]="true"/>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <!-- Expenses List -->
+    <ion-row>
+      <ion-col>
+        <ion-list>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Create Button -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="openModal()">
+      <ion-icon name="add"/>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
