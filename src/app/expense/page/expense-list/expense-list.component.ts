@@ -95,6 +95,7 @@ export default class ExpenseListComponent {
     // if (role === 'refresh') this.reloadCategories();
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   constructor() {
     // Add all used Ionic icons
     addIcons({ swapVertical, pricetag, search, alertCircleOutline, add, arrowBack, arrowForward });
