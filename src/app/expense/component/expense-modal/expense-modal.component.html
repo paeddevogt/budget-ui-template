@@ -35,6 +35,12 @@
       <ion-input maxlength="40" placeholder="Name" required="true" />
     </ion-item>
 
+    @for (category of categories; track category.id) {
+      <ion-select-option [value]="category.id">
+        {{ category.name }}
+      </ion-select-option>
+    }
+
     <ion-item>
       <ion-icon name="pricetag" slot="start" />
       <ion-input maxlength="40" required="true" />

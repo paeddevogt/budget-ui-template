@@ -27,6 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
 import { add, calendar, cash, close, pricetag, save, text, trash } from 'ionicons/icons';
 import CategoryModalComponent from '../../../category/component/category-modal/category-modal.component';
+import { Category } from '../../../shared/domain';
 
 @Component({
   selector: 'app-expense-modal',
@@ -62,6 +63,8 @@ import CategoryModalComponent from '../../../category/component/category-modal/c
 export default class ExpenseModalComponent {
   // DI
   private readonly modalCtrl = inject(ModalController);
+
+  categories: Category[] = [];
 
   constructor() {
     // Add all used Ionic icons
